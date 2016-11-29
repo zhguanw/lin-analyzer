@@ -4,6 +4,7 @@ A high-level performance analysis tool for FPGA-based accelerator.
 
 ## Installation
 ### Linux Installation
+
 Assume you have the following directory structure (windows setup is similar):
 ```
 $HOME
@@ -13,7 +14,9 @@ $HOME
    ~/build
    ~/boost_1_57_0
 ```
-1. LLVM and clang 3.5: 
+
+* LLVM and clang 3.5: 
+
 ```
 wget http://llvm.org/releases/3.5.0/llvm-3.5.0.src.tar.xz
 wget http://llvm.org/releases/3.5.0/cfe-3.5.0.src.tar.xz
@@ -23,30 +26,38 @@ tar -xvf cfe-3.5.0.src.tar.xz
 mv cfe-3.5.0.src clang
 cp -r clang llvm/tools
 ```
-2. Lin-Analyzer:
+
+* Lin-Analyzer:
+
 ```
 cd ~/llvm/tools
 git clone git@github.com:zhguanw/lin-analyzer.git
 open ~/llvm/tools/CMakeLists.txt and add "add_llvm_tool_subdirectory(lin-analyzer)" to it
 open ~/llvm/CMakeLists.txt and add "set(LLVM_REQUIRES_RTTI 1)" to enable RTTI feature
 ```
-3. Boost graph library: 
+
+* Boost graph library: 
+
 ```
 cd ~
 wget http://softlayer-sng.dl.sourceforge.net/project/boost/boost/1.57.0/boost_1_57_0.tar.gz
 tar -xvf boost_1_57_0.tar.gz
 ```
-4. zlib library, version 1.2.8
+
+* zlib library, version 1.2.8
+
 ```
 sudo apt-get install zlib1g-dev
 ```
-5. cmake
+
+* cmake
+
 ```
 sudo apt-get install cmake
 ```
 (I use version 2.8.12.2, higher version should be fine)
 
-6. Install Lin-Analyzer
+* Istall Lin-Analyzer
 ```
 cd ~
 mkdir build
@@ -55,10 +66,10 @@ cmake ~/llvm -DBOOST_INCLUDE_DIR=/your-path-to/boost_1_57_0 -DZLIB_INCLUDE_DIRS=
 ```
 
 ### Windows Installation
-I use cygwin, so the steps 1~3 are the same.
+I use cygwin, so the first three steps above are the same.
 
-4. Install Visual Studio 2013 (32-bit or 64-bit)
-5. zlib 1.2.8:
+* Install Visual Studio 2013 (32-bit or 64-bit)
+* zlib 1.2.8:
 ```
 (a). Download zlib from http://zlib.net/zlib-1.2.8.tar.gz and uncompress it
 (b). vim your_path_to\zlib-1.2.8\contrib\masmx86\bld_ml32.bat
@@ -72,14 +83,15 @@ I use cygwin, so the steps 1~3 are the same.
 (g). Build the static library. 
 (h). After successfully building the zlib static library, we need to specify its absolute path for ZLIB_INCLUDE_DIRS and ZLIB_LIBRARY variables in cmake.
 ```
-6. Install cmake 2.8.12.2
+
+* Install cmake 2.8.12.2
 ```
 Use cmake to compile llvm and setup Visual Studio project files
 Will update detailed instructions soon...
 ```
 
 ## Getting started
-1. Lin-Analyzer options
+* Lin-Analyzer options
 ```
 Usage:	lin-profiler [file.bc] -Ipath=[path] -config=[filename] [kernel-name] -Opath=[path] -TargetLoops=[index] [options]
 Options:
@@ -107,6 +119,7 @@ Options:
 	                         read-only and read-write.
 	-vc707                   Target for Xilinx Virtex7 VC707. Default is Xilinx Zedboard or ZC702
 ```
+
 2. Design Space Exploration
 ```
 export BOOST_ROOT=~/boost_1_57_0
@@ -117,6 +130,7 @@ export TESTBENCH_HOME=~/llvm/tools/lin-analyzer/testsuite/Ecobench
 cd ~/llvm/tools/lin-analyzer/testsuite/Ecobench/scripts
 python run_dse.py
 ```
+
 3. Windows
 ```
 Similar to Linux command, but use Visual Studio;
