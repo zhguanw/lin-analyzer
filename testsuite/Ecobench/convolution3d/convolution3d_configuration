@@ -1,0 +1,7 @@
+array,A,131072,4
+array,B,131072,4
+unrolling,convolution3d,0,1,16,1
+unrolling,convolution3d,0,2,17,1
+unrolling,convolution3d,0,3,18,2
+#partition,cyclic,A,131072,4,2
+#pipeline,convolution3d,0,2

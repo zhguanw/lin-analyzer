@@ -1,0 +1,9 @@
+array,A,65536,4
+array,C,65536,4
+unrolling,syrk,0,1,8,1
+unrolling,syrk,0,2,9,4
+unrolling,syrk,1,1,14,1
+unrolling,syrk,1,2,15,1
+unrolling,syrk,1,3,16,4
+#partition,cyclic,A,65536,4,2
+#pipeline,syrk,1,2

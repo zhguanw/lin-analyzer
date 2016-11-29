@@ -1,0 +1,8 @@
+[common]
+subdirectories = lib tools
+
+[component_0]
+type = Tool
+name = lin-analyzer
+parent = Tools
+required_libraries = Support LLVMLinProfiler BuildDDDGlib

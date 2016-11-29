@@ -1,0 +1,1 @@
+The input data of 2D Convolution benchmark is self-contained. For the input file, smallinput.data, we can just ignore it.

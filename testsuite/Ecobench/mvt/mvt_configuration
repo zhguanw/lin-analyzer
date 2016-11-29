@@ -1,0 +1,12 @@
+array,a,262144,4
+array,x1,1024,4
+array,x2,1024,4
+array,y1,1024,4
+array,y2,1024,4
+unrolling,mvt,0,1,7,1
+unrolling,mvt,0,2,8,2
+unrolling,mvt,1,1,13,1
+unrolling,mvt,1,2,14,1
+#partition,cyclic,a,262144,4,2
+#pipeline,mvt,0,2
+#pipeline,mvt,1,1

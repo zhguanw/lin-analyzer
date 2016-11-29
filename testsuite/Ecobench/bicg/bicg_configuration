@@ -1,0 +1,9 @@
+array,A,262144,4
+array,r,1024,4
+array,s,1024,4
+array,p,1024,4
+array,q,1024,4
+unrolling,bicg,0,1,11,1
+unrolling,bicg,0,2,13,4
+#partition,cyclic,A,262144,4,2
+#pipeline,bicg,0,1

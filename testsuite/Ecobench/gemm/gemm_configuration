@@ -1,0 +1,8 @@
+array,A,65536,4
+array,B,65536,4
+array,C,65536,4
+unrolling,gemm,0,1,7,1
+unrolling,gemm,0,2,8,1
+unrolling,gemm,0,3,11,128
+#partition,cyclic,A,65536,4,2
+#pipeline,gemm,0,2

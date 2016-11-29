@@ -1,0 +1,10 @@
+array,A,65536,4
+array,x,512,4
+array,y,512,4
+array,tmp,512,4
+unrolling,atax,0,1,7,1
+unrolling,atax,0,2,9,4
+unrolling,atax,1,1,15,1
+unrolling,atax,1,2,16,8
+#partition,cyclic,A,65536,4,2
+#pipeline,atax,0,2

@@ -1,0 +1,3 @@
+[common]
+subdirectories = Profile
+subdirectories = Build_DDDG

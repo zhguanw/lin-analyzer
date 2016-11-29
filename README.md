@@ -79,9 +79,9 @@ I use cygwin, so the first three steps above are the same.
      PATH = %PATH:your_path_to\Microsoft Visual Studio 13.0\VC\bin
 (d). Open zlibvc.sln using vs2013 located at your_path_to\zlib-1.2.8\contrib\vstudio\vc11
 (e). Open properties of zlibstat project and remove "ZLIB_WINAPI;" from  "Configuration Properties -> C/C++ -> Preprocessor -> Preprocessor Definitions"
-(f). If we generate 64-bit lin-profiler, then we also need to generate 64-bit zlib library. To do this, we need to Open "Configuration Manager" and change "Win32" to "x64" under "Platform"
+(f). If you generate 64-bit lin-analyzer, then you also need to generate 64-bit zlib library. To do this, you need to Open "Configuration Manager" and change "Win32" to "x64" under "Platform"
 (g). Build the static library. 
-(h). After successfully building the zlib static library, we need to specify its absolute path for ZLIB_INCLUDE_DIRS and ZLIB_LIBRARY variables in cmake.
+(h). After successfully building the zlib static library, you need to specify its absolute path for ZLIB_INCLUDE_DIRS and ZLIB_LIBRARY variables in cmake.
 ```
 
 * Install cmake 2.8.12.2
@@ -93,7 +93,7 @@ Will update detailed instructions soon...
 ## Getting started
 * Lin-Analyzer options
 ```
-Usage:	lin-profiler [file.bc] -Ipath=[path] -config=[filename] [kernel-name] -Opath=[path] -TargetLoops=[index] [options]
+Usage:	lin-analyzer [file.bc] -Ipath=[path] -config=[filename] [kernel-name] -Opath=[path] -TargetLoops=[index] [options]
 Options:
 	-h, --help               Help information.
 	-profiling-time          Profile kernels without FPGA estimation.
