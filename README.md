@@ -141,7 +141,8 @@ Will update it soon...
 
 TODO: Will update soon...
 
-==========================
+## Citation
+
 If you use Lin-Analyzer in your research, please cite
 
 Lin-Analyzer: A High-level Performance Analysis Tool for FPGA-based Accelerators,
