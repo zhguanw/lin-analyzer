@@ -57,7 +57,7 @@ sudo apt-get install cmake
 ```
 (I use version 2.8.12.2, higher version should be fine)
 
-* Istall Lin-Analyzer
+* Install Lin-Analyzer
 ```
 cd ~
 mkdir build
