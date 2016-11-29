@@ -1,135 +1,142 @@
-LLVM version: 07f1b21cb5c9ccda085f810c2c9d0d154e29f8c9
-CMake version: 2.8.12.2
-visual studio: 2013
+# Lin-Analyzer
 
-Input File:
-```
-#!c++
-clang -emit-llvm -c test.c
-opt -mem2reg -instnamer -lcssa -indvars test.bc -o test1.bc
-```
-Check llvm IR:
-```
-#!c++
-llvm-dis test1.bc
-```
-The method to compile multiple source codes:
+A high-level performance analysis tool for FPGA-based accelerator.
 
-Assume we have 2 source files, main.c and sum.c.
------------
-main.c:
+## Installation
+### Linux Installation
+Assume you have the following directory structure (windows setup is similar):
 ```
-#!c++
-#include <stdio.h>
-int sum(int x, int y);
-int main() {
-   int r = sum(3, 4);
-   printf("r = %d\n", r);
-   return 0;
-}
+$HOME
+   ~/llvm
+   ~/llvm/tools/clang
+   ~/llvm/tools/lin-analyzer
+   ~/build
+   ~/boost_1_57_0
 ```
-sum.c:
+1. LLVM and clang 3.5: 
 ```
-#!c++
-int sum(int x, int y) {
-   return x+y;
-}
+wget http://llvm.org/releases/3.5.0/llvm-3.5.0.src.tar.xz
+wget http://llvm.org/releases/3.5.0/cfe-3.5.0.src.tar.xz
+tar -xvf llvm-3.5.0.src.tar.xz
+mv llvm-3.5.0.src llvm
+tar -xvf cfe-3.5.0.src.tar.xz
+mv cfe-3.5.0.src clang
+cp -r clang llvm/tools
 ```
-Solution:
-
+2. Lin-Analyzer:
 ```
-#!c++
-
-clang -g -O3 -emit-llvm -c main.c -o main.bc
-clang -g -O1 -emit-llvm -c sum.c -o sum.bc
-llvm-link main.bc sum.bc -o sum.linked.bc
-opt -mem2reg -instnamer -lcssa -indvars sum.linked.bc -o sum.final.bc
+cd ~/llvm/tools
+git clone git@github.com:zhguanw/lin-analyzer.git
+open ~/llvm/tools/CMakeLists.txt and add "add_llvm_tool_subdirectory(lin-analyzer)" to it
+open ~/llvm/CMakeLists.txt and add "set(LLVM_REQUIRES_RTTI 1)" to enable RTTI feature
 ```
-
-How to run lin-profile:
-
+3. Boost graph library: 
 ```
-#!c++
-
-When we use visual studio 2013 to run lin-profile, we need to specify the input arguments as:
-
-input_bitcode.bc path_of_input_bitcode kernel_function_name kernel_subfunction_name
-
-eg, for stencil3d benchmark:
-
-E:\llvm\home\henry\llvm_3.5\input\stencil3d\stencil3d_app.bc E:\llvm\home\henry\llvm_3.5\input\stencil3d\ stencil3d
-```
----------------------------------------------
-Download boost graph library:
-
-```
-#!c++
-
+cd ~
 wget http://softlayer-sng.dl.sourceforge.net/project/boost/boost/1.57.0/boost_1_57_0.tar.gz
+tar -xvf boost_1_57_0.tar.gz
 ```
-
-
----------------------------------------------
-Install zlib library in linux:
-
+4. zlib library, version 1.2.8
 ```
-#!c++
-
 sudo apt-get install zlib1g-dev
 ```
-
-
-Build zlib library in visual studio 2013:
-1. Download zlib 1.2.8:  
-
+5. cmake
 ```
-#!c++
-
-wget http://zlib.net/zlib-1.2.8.tar.gz
+sudo apt-get install cmake
 ```
-2. change your_path_to\zlib-1.2.8\contrib\masmx86\bld_ml32.bat:
+(I use version 2.8.12.2, higher version should be fine)
 
+6. Install Lin-Analyzer
 ```
-#!c++
-
-ml.exe /coff /Zi /c /Flmatch686.lst match686.asm
-ml.exe /coff /Zi /c /Flinffas32.lst inffas32.asm
-```
-3. Make sure you set the path of system environment with: (this is used for finding ml.exe)
-
-```
-#!c++
-
-PATH = %PATH:your_path_to\Microsoft Visual Studio 13.0\VC\bin
-```
-4. Open zlibvc.sln using vs2013 located at your_path_to\zlib-1.2.8\contrib\vstudio\vc11
-5. Open properties of zlibstat project and remove "ZLIB_WINAPI;" from  "Configuration Properties -> C/C++ -> Preprocessor -> Preprocessor Definitions"
-6. If we generate 64-bit lin-profiler, then we also need to generate 64-bit zlib library. To do this, we need to Open "Configuration Manager" and change "Win32" to "x64" under "Platform"
-7. Build the static library. 
-8. After successfully building the zlib static library, we need to specify its absolute path for ZLIB_INCLUDE_DIRS and ZLIB_LIBRARY variables.
-
-Done!
-
-This project uses Cmake to link library automatically, if users want to link libraries manually, you can check this link: [http://www.codeproject.com/Articles/85391/Microsoft-Visual-C-Static-and-Dynamic-Libraries](http://www.codeproject.com/Articles/85391/Microsoft-Visual-C-Static-and-Dynamic-Libraries)
----------------------------------------------
-
-Before we use cmake to configure the environment, we need to edit the CMakeLists.txt located at $LLVM_SOURCE_DIR. Just add "set(LLVM_REQUIRES_RTTI 1)" to enable RTTI feature, because of boost graph library we used.
-
-To build lin-profiler in Linux or Unix
-Follow the steps in setup.h
-
-
-```
-#!c++
-In build folder, using the following commands for building llvm with lin-profiler
-cmake ../llvm-3.5.0.src/ -DENABLE_TESTSUITE=ON -DBOOST_INCLUDE_DIR=/home/guanwen1/boost_1_57_0 -DZLIB_INCLUDE_DIRS=/usr/include -DZLIB_LIBRARY=/usr/lib/x86_64-linux-gnu/libz.so
+cd ~
+mkdir build
+cd ~/build
+cmake ~/llvm -DBOOST_INCLUDE_DIR=/your-path-to/boost_1_57_0 -DZLIB_INCLUDE_DIRS=/usr/include -DZLIB_LIBRARY=/usr/lib/x86_64-linux-gnu/libz.so
 ```
 
-loop pipelining configuration format:
-pipeline,function name,loop number,loop level
+### Windows Installation
+I use cygwin, so the steps 1~3 are the same.
 
-The architecture of Lin-analyzer:
-![Lin-Analyzer_Architecture.jpg](https://bitbucket.org/repo/qokpMA/images/1538122950-Lin-Analyzer_Architecture.jpg)
+4. Install Visual Studio 2013 (32-bit or 64-bit)
+5. zlib 1.2.8:
+```
+(a). Download zlib from http://zlib.net/zlib-1.2.8.tar.gz and uncompress it
+(b). vim your_path_to\zlib-1.2.8\contrib\masmx86\bld_ml32.bat
+     ml.exe /coff /Zi /c /Flmatch686.lst match686.asm
+     ml.exe /coff /Zi /c /Flinffas32.lst inffas32.asm
+(c). Set Visual Studio to the system environment:
+     PATH = %PATH:your_path_to\Microsoft Visual Studio 13.0\VC\bin
+(d). Open zlibvc.sln using vs2013 located at your_path_to\zlib-1.2.8\contrib\vstudio\vc11
+(e). Open properties of zlibstat project and remove "ZLIB_WINAPI;" from  "Configuration Properties -> C/C++ -> Preprocessor -> Preprocessor Definitions"
+(f). If we generate 64-bit lin-profiler, then we also need to generate 64-bit zlib library. To do this, we need to Open "Configuration Manager" and change "Win32" to "x64" under "Platform"
+(g). Build the static library. 
+(h). After successfully building the zlib static library, we need to specify its absolute path for ZLIB_INCLUDE_DIRS and ZLIB_LIBRARY variables in cmake.
+```
+6. Install cmake 2.8.12.2
+```
+Use cmake to compile llvm and setup Visual Studio project files
+Will update detailed instructions soon...
+```
 
-Add -profiling-time support:
-When specifying this option, Lin-anlyzer will only run profiling without estimating FPGA execution cycles. This is used to figure out how much time spend on profiling step.
+## Getting started
+1. Lin-Analyzer options
+```
+Usage:	lin-profiler [file.bc] -Ipath=[path] -config=[filename] [kernel-name] -Opath=[path] -TargetLoops=[index] [options]
+Options:
+	-h, --help               Help information.
+	-profiling-time          Profile kernels without FPGA estimation.
+	-mem-trace               Obtain memory trace for access pattern analysis without FPGA estimation. This
+	                         option should be used with -profiling-time together.
+	-no-trace                Disable dynamic trace generation.
+	-TargetLoops             Specify target loops focused. Eg., -TargetLoops=2,3: only analyse loop 2 and 3.
+	-cfg-detailed            Show CFG with detailed instructions.
+	-cfg-only                Show CFG only with basic blocks.
+	-dddg-bf-opt             Show DDDG before optimization. May slow down program if input size is large
+	-dddg-af-opt             Show DDDG after optimization. May slow down program if input size is large
+	-verbose                 Verbose mode, print more information.
+	-dis-store-buffer        Disable store-buffer optimization.
+	-shared-load-removal     Enable shared-load-removal optimization.
+	-dis-shared-load-removal Disable shared-load-removal opt., even for completely unrolling config.
+	-dis-rp-store-removal    Disable repeated-store-removal optimization.
+	-THR-float               Enable tree height reduction optimization for floating point operations.
+	-THR-integer             Enable tree height reduction optimization for integer operations.
+	-memory-disambig         Enable memory disambiguation optimization.
+	-dis-fp-threshold        Disable floating point unit threshold and area budget is unlimited.
+	-en-extra-scalar         Sometimes, result might be shifted, this option is used to improve prediction.
+	-en-rw-rw-memory         Use memory with two ports and each supports read and write operation. Default is
+	                         read-only and read-write.
+	-vc707                   Target for Xilinx Virtex7 VC707. Default is Xilinx Zedboard or ZC702
+```
+2. Design Space Exploration
+```
+export BOOST_ROOT=~/boost_1_57_0
+export LD_LIBRARY_PATH=~/build/bin/lib
+export LLVM_BIN_HOME=~/build/bin
+export LLVM_SRC=~/llvm
+export TESTBENCH_HOME=~/llvm/tools/lin-analyzer/testsuite/Ecobench
+cd ~/llvm/tools/lin-analyzer/testsuite/Ecobench/scripts
+python run_dse.py
+```
+3. Windows
+```
+Similar to Linux command, but use Visual Studio;
+Will update it soon...
+```
+
+## License
+
+TODO: Will update soon...
+
+==========================
+If you use Lin-Analyzer in your research, please cite
+
+Lin-Analyzer: A High-level Performance Analysis Tool for FPGA-based Accelerators,
+Guanwen Zhong, Alok Prakash,Yun Liang, Tulika Mitra, Smail Niar,
+53rd ACM/IEEE Design Automation Conference, June 2016
+
+==========================
+Guanwen (Henry) Zhong,
+
+guanwen@comp.nus.edu.sg
+
+National University of Singapore, 2016
