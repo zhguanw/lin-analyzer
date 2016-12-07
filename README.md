@@ -139,7 +139,9 @@ Will update it soon...
 
 ## License
 
-TODO: Will update soon...
+Lin-Analyzer is licensed under the GPL-3.0 license.
+
+Dynamic data graph generation (DDDG) and few of optimization functions in Lin-Analyzer are modified from Aladdin project and Lin-Analyzer is also followed Aladdin's license. For more information, please visit Aladdin's website: https://github.com/ysshao/ALADDIN
 
 ## Citation
 
